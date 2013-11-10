@@ -2,3 +2,17 @@ Python3 / tkinter implementation of Conway's Game Of Life
 by Szymon Jakubiak
 
 Tested in Python 3.2.3
+
+1. Configuration
+
+It is possible to configure following simulation parameters by editing
+constants in the header of GameOfLife.py file:
+
+* size of the game window which is determined by number of cells
+diagonally (WORLD_WIDTH) and vertically (WORLD_HEIGHT) as well as size
+of single cell in pixels (CELL_SIZE)
+
+* behavior of cells at window boarder: if ROUND_WORLD has value True cells
+from first column / row will interact with cells from last column / row,
+what for example allows ship to fly around the world; if ROUND_WORLD has value
+False boarder of the screen is counted as dead cell
