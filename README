@@ -16,3 +16,15 @@ of single cell in pixels (CELL_SIZE)
 from first column / row will interact with cells from last column / row,
 what for example allows ship to fly around the world; if ROUND_WORLD has value
 False boarder of the screen is counted as dead cell
+
+2. Future plans
+
+* implement years, centuries and milleniums to measure time
+
+* display current date (elapsed time) in main window
+
+* display used seed and other simulation options in main window
+
+* end simulation when there was no change in last year
+
+* implement system to recognize created structures and save year of observation
