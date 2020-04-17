@@ -4,13 +4,6 @@
 # Code by Szymon Jakubiak                                            #
 #                                                                    #
 # Tested in Python 3.2.3                                             #
-#                                                                    #
-# Things to do:                                                      #
-# - implement centuries or milleniums to time calculations           #
-# - display current year and millenium in main window                #
-# - display seed used to initialize world in main window             #
-# - check if there was any change in recent year, if not end game    #
-# - recognize created structures and save year of observation        #
 ######################################################################
 
 from tkinter import *
@@ -18,21 +11,21 @@ from tkinter import messagebox
 import random
 
 # Options
-WORLD_WIDTH = 400   # number of cells diagonally
-WORLD_HEIGHT = 250   # number of cells vertically
-CELL_SIZE = 3   # side of single cell in pixels
-ROUND_WORLD = True   # if True object can move around edges, if False edge is treated as empty cell
-USE_USER_SEED = False   # if True USER_SEED will be used to settle cells on world map, if False random seed will be generated
+WORLD_WIDTH = 100   # number of cells horizontally
+WORLD_HEIGHT = 80   # number of cells vertically
+CELL_SIZE = 8   # size of a cell in pixels
+ROUND_WORLD = True   # if True object can move around the edges, if False edge is treated as an empty cell
+USE_USER_SEED = False   # if True USER_SEED will be used to settle cells on world map at the beginning, if False random seed will be generated
 USER_SEED = '065992'   # seed for initial colony of cells (string with six digits)
-DRAW_GRID = False   # if True whole world will be divided into cells
+DRAW_GRID = False   # if True world will be divided into cells
 GRID_COLOUR = 'black'
 BACKGROUND_COLOUR = 'white'
 LIVE_CELL_COLOUR = 'orange'
-SIZE_OF_INITIAL_COLONY = 0.5   # where 1 is whole map
-YEAR_LENGTH = 100   # time in ms before changing state of the colony (it may take longer depending of total number of cells)
+SIZE_OF_INITIAL_COLONY = 0.5   # fraction of the world seeded with cells at the beginning of the simulation
+YEAR_LENGTH = 100   # time in ms before changing state of the colony (it may take longer depending on total number of cells)
 
 # Constants
-VERSION = '0.32'
+VERSION = '0.33'
 CENTER_X = int(WORLD_WIDTH / 2)
 CENTER_Y = int(WORLD_HEIGHT / 2)
 WINDOW_WIDTH = WORLD_WIDTH * CELL_SIZE
@@ -40,7 +33,6 @@ WINDOW_HEIGHT = WORLD_HEIGHT * CELL_SIZE
 
 # Variables
 cells = []   # array where Cell objects will be stored
-population_year = 0
 
 class Cell:
     def __init__(self, x, y):
@@ -92,22 +84,14 @@ class Cell:
 
 # Helper function used to draw a grid on a world map
 def draw_grid():
-        for x in range (1, WORLD_WIDTH):
-                canvas.create_line(x * CELL_SIZE, 0,
-                              x * CELL_SIZE, WINDOW_HEIGHT,
-                              fill = GRID_COLOUR)
-        for y in range (1, WORLD_HEIGHT):
-                canvas.create_line(0, y * CELL_SIZE,
-                              WINDOW_WIDTH, y * CELL_SIZE,
-                              fill = GRID_COLOUR)
-
-# Helper function used to draw single cell using rectangle
-def draw_cell(x, y):
-        top_left_x = x * CELL_SIZE
-        top_left_y = y * CELL_SIZE
-        canvas.create_rectangle(top_left_x, top_left_y,
-                           top_left_x + CELL_SIZE, top_left_y + CELL_SIZE,
-                           fill = LIVE_CELL_COLOUR)
+    for x in range (1, WORLD_WIDTH):
+        canvas.create_line(x * CELL_SIZE, 0,
+                      x * CELL_SIZE, WINDOW_HEIGHT,
+                      fill = GRID_COLOUR)
+    for y in range (1, WORLD_HEIGHT):
+        canvas.create_line(0, y * CELL_SIZE,
+                      WINDOW_WIDTH, y * CELL_SIZE,
+                      fill = GRID_COLOUR)
 
 # Create world filled with dead cells
 def create_world():
@@ -146,12 +130,10 @@ def update_colony():
     for row in cells:
         for cell in row:
             cell.check_rules()
-    population_year += 1
-    print ("It's year", population_year)
     main.after(YEAR_LENGTH, update_colony)
 
 def show_info():
-    messagebox.showinfo(title = 'About', message = 'Game of Life ver. ' + VERSION)
+    messagebox.showinfo(title = 'About', message = 'Game of Life ver. ' + VERSION + "\nAuthor: Szymon Jakubiak")
 
 def close_window():
     decision = messagebox.askyesno(title = 'Quit', message = 'Do You want to Quit?')
